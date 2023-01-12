@@ -38,13 +38,17 @@ class Nunchuck(object):
     def update(self):
         """Requests a sensor readout from the controller and receives the
         six data bits afterwards."""
-        self.i2c.writeto(self.address, b'\x00')
         self.i2c.readfrom_into(self.address, self.buffer)
+        self.i2c.writeto(self.address, b'\x00')
 
     def __poll(self):
         """Poll the sensor readouts if necessary."""
         if time.ticks_diff(time.ticks_ms(), self.last_poll) > self.polling_threshold:
-            self.update()
+            try:
+                self.update()
+            except Exception as e:
+                print(e) # pass EIO error
+            self.last_poll = time.ticks_ms()
 
     def accelerator(self):
         """Retrieve the three axis of the last accelerometer reading.
@@ -99,6 +103,6 @@ class Nunchuck(object):
         return (self.buffer[0] >> 2) - 34
 
     def joystick_y(self):
-        # Returns "normalized" x axis values
+        # Returns "normalized" y axis values
         self.__poll()
         return (self.buffer[1] >> 2) - 34

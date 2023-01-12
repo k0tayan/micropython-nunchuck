@@ -4,9 +4,9 @@ import time
 import nunchuck
 
 nun = nunchuck.Nunchuck(machine.I2C(
-        scl=machine.Pin(5),
-        sda=machine.Pin(4),
-        freq=100000
+        scl=machine.Pin(7),
+        sda=machine.Pin(6),
+        freq=80000 # 100kHz seems to be getting EIO Error, 80kHz seems to work
         ))
 
 x = 0
@@ -32,4 +32,4 @@ while True:
             b[0], b[1]
             ))
 
-    time.sleep_ms(100)
+    time.sleep_ms(10)
