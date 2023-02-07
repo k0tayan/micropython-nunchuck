@@ -4,6 +4,7 @@ import time
 import nunchuck
 
 nun = nunchuck.Nunchuck(machine.I2C(
+        1,
         scl=machine.Pin(7),
         sda=machine.Pin(6),
         freq=80000 # 100kHz seems to be getting EIO Error, 80kHz seems to work
